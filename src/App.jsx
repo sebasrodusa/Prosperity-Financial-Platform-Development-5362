@@ -5,6 +5,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { DataProvider } from './contexts/DataContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Onboarding from './pages/Onboarding';
 import Dashboard from './pages/Dashboard';
 import ClientProfile from './pages/ClientProfile';
@@ -27,6 +28,7 @@ function App() {
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/onboarding" element={<Onboarding />} />
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route
