@@ -18,9 +18,30 @@ const Login = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    
+
     try {
       const result = await login(email, password);
+      if (result.success) {
+        navigate('/dashboard');
+      } else {
+        setError(result.error || 'Failed to log in. Please try again.');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async (demoEmail, demoPassword) => {
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+    setError('');
+    setLoading(true);
+
+    try {
+      const result = await login(demoEmail, demoPassword);
       if (result.success) {
         navigate('/dashboard');
       } else {
@@ -74,23 +95,20 @@ const Login = () => {
             <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
             <p className="text-gray-600 mt-2">Sign in to access your account</p>
           </div>
-          
+
           {(error || authError) && (
             <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
               <p className="text-red-700">{error || authError}</p>
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email Address
               </label>
               <div className="relative">
-                <SafeIcon 
-                  icon={FiMail} 
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                />
+                <SafeIcon icon={FiMail} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   id="email"
                   type="email"
@@ -102,16 +120,13 @@ const Login = () => {
                 />
               </div>
             </div>
-            
+
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
               <div className="relative">
-                <SafeIcon 
-                  icon={FiLock} 
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                />
+                <SafeIcon icon={FiLock} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   id="password"
                   type="password"
@@ -128,7 +143,7 @@ const Login = () => {
                 </a>
               </div>
             </div>
-            
+
             <button
               type="submit"
               disabled={loading}
@@ -141,7 +156,7 @@ const Login = () => {
               )}
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
-            
+
             <div className="text-center text-sm text-gray-600">
               <p>
                 Don't have an account?{' '}
@@ -150,19 +165,71 @@ const Login = () => {
                 </Link>
               </p>
             </div>
-            
-            <div className="text-center text-sm text-gray-600 mt-4 pt-4 border-t border-gray-200">
-              <p>
-                Demo admin account: 
-                <strong className="text-gray-800"> sebasrodus+admin@gmail.com</strong> / 
-                <strong className="text-gray-800"> demo123</strong>
-              </p>
+
+            {/* Demo Accounts Section */}
+            <div className="mt-8 pt-6 border-t border-gray-200">
+              <h3 className="text-center text-sm font-medium text-gray-700 mb-4">Demo Accounts</h3>
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('sebasrodus+admin@gmail.com', 'demo123')}
+                  className="w-full p-3 bg-purple-50 border border-purple-200 rounded-lg text-left hover:bg-purple-100 transition-colors"
+                  disabled={loading}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-purple-900">Admin Account</p>
+                      <p className="text-sm text-purple-600">Full system access</p>
+                    </div>
+                    <div className="text-xs text-purple-500">
+                      <p>sebasrodus+admin@gmail.com</p>
+                      <p>demo123</p>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('advisor@prosperity.com', 'demo123')}
+                  className="w-full p-3 bg-blue-50 border border-blue-200 rounded-lg text-left hover:bg-blue-100 transition-colors"
+                  disabled={loading}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-blue-900">Advisor Account</p>
+                      <p className="text-sm text-blue-600">Client management & reports</p>
+                    </div>
+                    <div className="text-xs text-blue-500">
+                      <p>advisor@prosperity.com</p>
+                      <p>demo123</p>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleDemoLogin('client@prosperity.com', 'demo123')}
+                  className="w-full p-3 bg-green-50 border border-green-200 rounded-lg text-left hover:bg-green-100 transition-colors"
+                  disabled={loading}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-green-900">Client Account</p>
+                      <p className="text-sm text-green-600">Limited access</p>
+                    </div>
+                    <div className="text-xs text-green-500">
+                      <p>client@prosperity.com</p>
+                      <p>demo123</p>
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
           </form>
-          
+
           <div className="mt-8 text-center">
-            <Link 
-              to="/signup" 
+            <Link
+              to="/signup"
               className="inline-flex items-center justify-center space-x-2 text-blue-600 hover:text-blue-800"
             >
               <SafeIcon icon={FiUserPlus} className="w-5 h-5" />
